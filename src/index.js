@@ -4,6 +4,7 @@ const User = require('./models/User');
 const ParkFind = require('./models/ParkFind');
 const ParkRequest = require('./models/ParkRequest');
 const Parking = require('./models/Parking');
+const fs = require('fs');
 
 const app = express();
 
@@ -317,21 +318,112 @@ var currentParking = [];
 
 let currentTime = new Date();
 let stopTime =  new Date();
-stopTime.setDate(currentTime.getDate()+10);
-//stopTime.setHours(currentTime.getDate()+8);
+stopTime.setDate(currentTime.getDate()+30);
 
-//deleteAll();
-main();
-//query();
+//deleteAll();    // Delete Database
+//main();         // Create 30 Days Database simulation
+
+query1();   // Generate CSV1: Total Parking Ever
+query2(30); // Generate CSV2: Days range
+query3(24); // Generate CSV3: Hours range
 
 app.listen(3333);
 
 // ---------------------------------------------
 
-async function query() {
-    const list = await Parking.find({ refParkingSpot: "IPB-PARKING-ESTIG-SPOT1"},{ _id:0, enterDate:1 ,exitDate: 1 });
-    console.log(list);
-}
+async function query1() {
+    let query ="ParkGroup,Total Parkings\n";
+    await Parking.count({ refParkingGroup: "IPB-PARKING-ESTIG" }, function(err, result) {
+        if (err) {
+          console.log(err);
+        } else {
+          query += "IPB-PARKING-ESTIG,"+result.toString()+"\n";
+        }
+      });
+    await Parking.count({ refParkingGroup: "IPB-PARKING-EDUCACAO" }, function(err, result) {
+        if (err) {
+          console.log(err);
+        } else {
+          query += "IPB-PARKING-EDUCACAO,"+result.toString()+"\n";
+        }
+      });
+    await Parking.count({ refParkingGroup: "IPB-PARKING-CANTINA" }, function(err, result) {
+        if (err) {
+          console.log(err);
+        } else {
+          query += "IPB-PARKING-CANTINA,"+result.toString()+"\n";
+        }
+      });
+
+    fs.writeFileSync('src/csv/query1.csv', query);
+    return console.log("Query1 - Finalizada");
+ }
+
+ async function query2(days) {
+    let baseTime = new Date();
+    baseTime.setHours(1);
+    baseTime.setMinutes(0);
+    baseTime.setSeconds(0);
+    let lastTime = new Date();
+    lastTime.setHours(24);
+    lastTime.setMinutes(59);
+    lastTime.setSeconds(59);
+
+    console.log(baseTime);
+    console.log(lastTime);
+
+    let query ="Data,Total Parkings\n";
+    for (let i=1; i<=days; i++) {
+        await Parking.count({ enterDate: { $gte: baseTime, $lte: lastTime } }, function(err, result) {
+            if (err) {
+                console.log(err);
+            } else {
+                query += baseTime.getDate()+"/"+baseTime.getMonth()+"/"+baseTime.getFullYear()+","+result.toString()+"\n";
+            }
+        });
+        baseTime.setDate(baseTime.getDate()+1);
+        lastTime.setDate(lastTime.getDate()+1);
+    }
+
+    fs.writeFileSync('src/csv/query2.csv', query);
+    return console.log("Query2 - Finalizada");
+ }
+
+ async function query3(hours) {
+    let baseTime = new Date();
+    let lastTime = new Date();
+
+    baseTime.setDate(baseTime.getDate()+6);
+    lastTime.setDate(lastTime.getDate()+6);
+
+    baseTime.setHours(0);
+    lastTime.setHours(1);
+    baseTime.setMinutes(0);
+    baseTime.setSeconds(0);
+    lastTime.setMinutes(0);
+    lastTime.setSeconds(0);
+
+    let query ="Hour,Total Parkings (30/05/2020)\n";
+    for (let i=1; i<=hours; i++) {
+        await Parking.count({ enterDate: { $gte: baseTime, $lte: lastTime } }, function(err, result) {
+            if (err) {
+                console.log(err);
+            } else {
+                query += baseTime.getHours()+":"+baseTime.getMinutes()+","+result.toString()+"\n";
+            }
+        });
+        baseTime.setHours(baseTime.getHours()+1);
+        lastTime.setHours(lastTime.getHours()+1);
+    }
+
+    fs.writeFileSync('src/csv/query3.csv', query);
+    return console.log("Query3 - Finalizada");
+ }
+
+ // Maior Taxa de preenchimento simultaneo diario
+ async function query4(hours) {
+
+ }
 
 async function main() {
     let max = 0;
@@ -342,54 +434,16 @@ async function main() {
         let incrementTime = getRandomNumber(5,70);
         currentTime.setMinutes(currentTime.getMinutes()+incrementTime);
 
-        /*let total = 0;
-        currentParking.map( (park) => {
-            let inside_total = 0;
-            currentParking.map( (park2) => {
-                if (park.refParkingSpot == park2.refParkingSpot) {
-                    inside_total += 1;
-                }
-            });
-            if (inside_total > 1) {
-               total = 1;
-            }
-        });
-
-        if (total == 1) {
-            console.log("\n ERRO GROSSEIRO: \n",currentParking);
-        }*/
-        //console.log("\n\n*** ANTES\n");
-        //console.log(currentParking);
-        //console.log("\n**** ",currentTime);
-
         // Remove da lista atual todos parking cujo horario de saida foi ultrapassado
         currentParking = currentParking.filter( (park) => { 
             if (park.exitDate.getTime() > currentTime.getTime() ) {
-                //console.log("\nData de Saida maior que data Atual: ",park.exitDate," => ",currentTime,"\n");
-                //console.log(park.exitDate);
-                //console.log(currentTime);
             }
             return park.exitDate.getTime() > currentTime.getTime();
         });
 
-        if (currentParking.length == 16) {
-            console.log("Cheio");
-        } else {
-            console.log("Vago");
-        }
-
         if (currentParking.length > max) {
             max = currentParking.length;
         }
-
-        //console.log("\n\n*** APOS\n");
-        //console.log(currentParking);
-        //console.log("\n**** "+currentTime);
-
-        /*if (currentParking.length >= 10) {
-            console.log("\nALERT:",currentParking.length,"\n");
-            console.log("\n ***************** "+currentTime+" **************\n")
-        }*/
     }
     console.log("Finalizou Main");
     console.log("Maximo de vagas simultaneamente: ",max);
@@ -459,10 +513,9 @@ async function randomParkFind() {
             });
             console.log("2. ParkRequest");
 
-            let attemptNumber = 10;
+            let attemptNumber = 14;
             let reserved = false;
 
-            /*
             while(attemptNumber > 0) {
                 spotNumber = getRandomNumber(1,16);
 
@@ -589,7 +642,6 @@ async function randomParkFind() {
                 }
                 attemptNumber -= 1;
             }
-            */
 
             if (reserved == false) {
                 for (const spot of parking1_spots) {
