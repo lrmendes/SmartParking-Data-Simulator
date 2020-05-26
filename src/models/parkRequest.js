@@ -2,8 +2,7 @@ const mongoose = require('../database');
 
 const ParkRequestSchema = new mongoose.Schema({
     userId: {
-        type: Number,
-        unique: true,
+        type: String,
         required: true,
     },
     enterDate: {
