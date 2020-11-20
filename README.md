@@ -5,10 +5,11 @@ This application is part of the master's thesis and part of a set of application
 
 This generator produces an output data for the following Time Series Forecasting applications:
 - <b>SmartParking Time Series Forecasting</b>
-<a href="https://github.com/lrmendes/SmartParking-TimeSeries-Forecasting" target="_blank">Click here</a> to access the SmartParking Time Series Forecasting.
-<br/>
+    - <a href="https://github.com/lrmendes/SmartParking-TimeSeries-Forecasting" target="_blank">Click here</a> to access the SmartParking Time Series Forecasting.
+
+
 - <b>SmartParking Data Analysis Dashboard</b>
-<a href="https://github.com/lrmendes/SmartParking-Data-Analysis-Dashboard" target="_blank">Click here</a> to access the SmartParking Data Analysis Dashboard.
+    - <a href="https://github.com/lrmendes/SmartParking-Data-Analysis-Dashboard" target="_blank">Click here</a> to access the SmartParking Data Analysis Dashboard.
 
 ------------
 
