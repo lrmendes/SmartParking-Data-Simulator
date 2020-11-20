@@ -1,40 +1,3 @@
-## Smart Parking Data Simulator
-
-A data simulator for Smart Parking system.
-This application is part of the master's thesis and part of a set of applications focused on data mining, data analysis and forecasting in smart parking systems.
-
-This generator produces an output data for the following Time Series Forecasting applications:
-- <b>SmartParking Time Series Forecasting</b>
-<a href="https://github.com/lrmendes/SmartParking-TimeSeries-Forecasting" target="_blank">Click here</a> to access the SmartParking Time Series Forecasting.
-<br/>
-- <b>SmartParking Data Analysis Dashboard</b>
-<a href="https://github.com/lrmendes/SmartParking-Data-Analysis-Dashboard" target="_blank">Click here</a> to access the SmartParking Data Analysis Dashboard.
-
-------------
-
-### Objective:
-
-This application allows the production of extensive parking datasets with entry and exit datetimes, following a parking pattern defined by the user from dozens of variables that influence the traffic of a parking lot.
-<br>_Example: It is possible to generate parking data for several years, defining the daily flow times, months with more or less flow, flow during rainy hours, flow during holidays and special days. In addition to features such as opening and closing times for the parking lot, maximum time limit for parking lots and parking space limit_.
-
-### Technologies
-
-- Python
-    - Pandas (data management)
-    - Seaborn (data visualization)
-    - Matplotlib (data visualization)
-
-### Features
-- Customized Variables
-- Generates Trend & Seasonality
-- The Weather is based on real data
-- Allows simulation for some days or many years
-- Displays various visualization charts of the simulated data
-
-------------
-
-### Data Generator Full Notebook Visualization (with graphs):
-
 ```python
 # V5 -> Adicao de Clima Atual no momento do estacionamento, baseado em dataset de cidades americanas:
 #https://www.kaggle.com/selfishgene/historical-hourly-weather-data?select=weather_description.csv
@@ -1460,7 +1423,7 @@ plt.plot(df4)
 
 
 
-![png](examples/output_12_1.png)
+![png](output_12_1.png)
 
 
 
@@ -1482,7 +1445,7 @@ plt.show()
 ```
 
 
-![png](examples/output_13_0.png)
+![png](output_13_0.png)
 
 
 
@@ -1868,7 +1831,7 @@ plt.plot(df3)
 
 
 
-![png](examples/output_15_2.png)
+![png](output_15_2.png)
 
 
 
@@ -1939,7 +1902,7 @@ else:
     
 
 
-![png](examples/output_16_1.png)
+![png](output_16_1.png)
 
 
 
@@ -1984,7 +1947,7 @@ plt.show()
     
 
 
-![png](examples/output_17_1.png)
+![png](output_17_1.png)
 
 
 
@@ -2044,7 +2007,7 @@ plt.show()
     
 
 
-![png](examples/output_18_1.png)
+![png](output_18_1.png)
 
 
 
@@ -2369,7 +2332,7 @@ plt.show()
 ```
 
 
-![png](examples/output_23_0.png)
+![png](output_23_0.png)
 
 
 
